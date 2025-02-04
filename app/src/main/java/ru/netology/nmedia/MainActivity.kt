@@ -7,12 +7,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import ru.netology.nmedia.adapter.PostAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
-import ru.netology.nmedia.databinding.CardPostBinding
-import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: PostViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -20,45 +22,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         applyInset(binding.root)
 
-        val viewModel: PostViewModel by viewModels()
+        val adapter = PostAdapter(
+            likeClickListener = { post ->
+                viewModel.likeById(post.id)
+            },
+            shareClickListener = { post ->
+                viewModel.shareById(post.id)
+            }
+        )
+
+        binding.main.adapter = adapter
 
         viewModel.data.observe(this) { posts ->
-            binding.main.removeAllViews()
-            posts.forEach { post ->
-                val cardPostBinding = CardPostBinding.inflate(layoutInflater, binding.main, true)
-                bindPost(cardPostBinding, post)
-                cardPostBinding.like.setOnClickListener {
-                    viewModel.likeById(post.id)
-                }
-                cardPostBinding.share.setOnClickListener {
-                    viewModel.shareById(post.id)
-                }
-            }
-        }
-    }
-
-    private fun bindPost(
-        binding: CardPostBinding,
-        post: Post
-    ) {
-        with(binding) {
-            author.text = post.author
-            content.text = post.content
-            published.text = post.published
-
-            like.setImageResource(
-                if (post.likedByMe) {
-                    R.drawable.ic_liked_24
-                } else {
-                    R.drawable.ic_like_24
-                }
-            )
-
-            likeCount.text = CountCalculator.calculate(post.likes)
-
-            shareCount.text = CountCalculator.calculate(post.shares)
-
-            viewsCount.text = CountCalculator.calculate(post.views)
+            adapter.submitList(posts)
         }
     }
 
