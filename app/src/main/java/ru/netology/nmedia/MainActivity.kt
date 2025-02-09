@@ -2,6 +2,7 @@ package ru.netology.nmedia
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,9 @@ class MainActivity : AppCompatActivity() {
             },
             shareClickListener = { post ->
                 viewModel.shareById(post.id)
+            },
+            removeClickListener =  { post ->
+                viewModel.removeById(post.id)
             }
         )
 
@@ -35,6 +39,21 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.data.observe(this) { posts ->
             adapter.submitList(posts)
+        }
+
+        binding.save.setOnClickListener {
+            val text = binding.content.text.toString()
+            if (text.isNullOrBlank()) {
+                Toast.makeText(
+                    this,
+                    R.string.error_empty_content,
+                    Toast.LENGTH_LONG
+                ).show()
+                return@setOnClickListener
+            }
+
+            viewModel.saveContent(text)
+            binding.content.clearFocus()
         }
     }
 
