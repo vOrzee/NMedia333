@@ -38,7 +38,7 @@ class PostViewModel : ViewModel() {
     }
 
     fun saveContent(content: String) {
-        edited.value?.let { editPost->
+        edited.value?.let { editPost ->
             repository.save(editPost.copy(content = content))
         }
     }

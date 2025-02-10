@@ -8,8 +8,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.util.AndroidUtils
+import ru.netology.nmedia.util.focusAndShowKeyboard
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -23,22 +27,42 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         applyInset(binding.root)
 
-        val adapter = PostAdapter(
-            likeClickListener = { post ->
+        val adapter = PostAdapter(object : OnInteractionListener {
+            override fun onLike(post: Post) {
                 viewModel.likeById(post.id)
-            },
-            shareClickListener = { post ->
+            }
+
+            override fun onShare(post: Post) {
                 viewModel.shareById(post.id)
-            },
-            removeClickListener =  { post ->
+            }
+
+            override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
             }
+
+            override fun onEdit(post: Post) {
+                viewModel.editContent(post)
+            }
+
+        }
         )
 
         binding.main.adapter = adapter
 
         viewModel.data.observe(this) { posts ->
-            adapter.submitList(posts)
+            val newPost = adapter.currentList.size < posts.size
+            adapter.submitList(posts) {
+                if (newPost) {
+                    binding.main.smoothScrollToPosition(0)
+                }
+            }
+        }
+
+        viewModel.edited.observe(this) { editedPost ->
+            if (editedPost.id == 0L) return@observe
+
+            binding.content.setText(editedPost.content)
+            binding.content.focusAndShowKeyboard()
         }
 
         binding.save.setOnClickListener {
@@ -53,7 +77,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             viewModel.saveContent(text)
+            binding.content.setText("")
             binding.content.clearFocus()
+            AndroidUtils.hideKeyboard(it)
         }
     }
 

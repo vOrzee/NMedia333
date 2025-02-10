@@ -9,9 +9,7 @@ import ru.netology.nmedia.dto.Post
 
 class PostViewHolder(
     private val binding: CardPostBinding,
-    private val onLikeClicked: OnLikeClicked,
-    private val onShareClicked: OnShareClicked,
-    private val onRemoveClicked: OnRemoveClicked
+    private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -35,23 +33,30 @@ class PostViewHolder(
             viewsCount.text = CountCalculator.calculate(post.views)
 
             like.setOnClickListener {
-                onLikeClicked(post)
+                onInteractionListener.onLike(post)
             }
 
             share.setOnClickListener {
-                onShareClicked(post)
+                onInteractionListener.onShare(post)
             }
 
-            menu.setOnClickListener{
+            menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_menu)
-                    setOnMenuItemClickListener { menuItem->
-                       when(menuItem.itemId) {
-                           R.id.remove -> {
-                               onRemoveClicked(post)
-                               true
-                           } else -> false
-                       }
+                    setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true
+                            }
+
+                            else -> false
+                        }
                     }
                 }.show()
             }
