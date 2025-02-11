@@ -15,6 +15,7 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.AndroidUtils
 import ru.netology.nmedia.util.focusAndShowKeyboard
 import ru.netology.nmedia.viewmodel.PostViewModel
+import ru.netology.nmedia.viewmodel.empty
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,10 +60,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.edited.observe(this) { editedPost ->
-            if (editedPost.id == 0L) return@observe
-
+            if (editedPost.id == 0L) {
+                binding.editGroup.visibility = View.GONE
+            } else {
+                binding.editGroup.visibility = View.VISIBLE
+                binding.editPreview.text = editedPost.content
+            }
             binding.content.setText(editedPost.content)
             binding.content.focusAndShowKeyboard()
+        }
+
+        binding.cancel.setOnClickListener {
+            viewModel.editContent(empty)
+            binding.editGroup.visibility = View.GONE
+            binding.content.setText("")
+            binding.content.clearFocus()
+            AndroidUtils.hideKeyboard(it)
         }
 
         binding.save.setOnClickListener {
@@ -77,6 +90,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             viewModel.saveContent(text)
+            binding.editGroup.visibility = View.GONE
             binding.content.setText("")
             binding.content.clearFocus()
             AndroidUtils.hideKeyboard(it)
