@@ -18,6 +18,12 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: PostViewModel by viewModels()
 
+    val editPostLauncher = registerForActivityResult(EditPostContract) { result ->
+        result ?: return@registerForActivityResult
+        viewModel.changeContent(result)
+        viewModel.saveContent()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onEdit(post: Post) {
                 viewModel.editContent(post)
+                editPostLauncher.launch(post.content)
             }
 
         }
@@ -69,8 +76,14 @@ class MainActivity : AppCompatActivity() {
             viewModel.saveContent()
         }
 
-        binding.add.setOnClickListener {
-            newPostLauncher.launch(Unit)
+        viewModel.edited.observe(this) { post ->
+            if (post.id == 0L) {
+                return@observe
+            }
+
+            binding.add.setOnClickListener {
+                newPostLauncher.launch(Unit)
+            }
         }
     }
 
