@@ -14,6 +14,7 @@ import ru.netology.nmedia.databinding.ActivityEditPostBinding
 
 class EditPostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val binding = ActivityEditPostBinding.inflate(layoutInflater)
         setContentView(binding.root)

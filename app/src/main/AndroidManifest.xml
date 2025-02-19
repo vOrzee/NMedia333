@@ -16,7 +16,7 @@
             android:name=".EditPostActivity"
             android:exported="false"
             android:supportsRtl="false"
-            android:windowSoftInputMode="adjustResize"/>
+        android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".NewPostActivity"
             android:exported="false"

@@ -80,10 +80,10 @@ class MainActivity : AppCompatActivity() {
             if (post.id == 0L) {
                 return@observe
             }
+        }
 
-            binding.add.setOnClickListener {
-                newPostLauncher.launch(Unit)
-            }
+        binding.add.setOnClickListener {
+            newPostLauncher.launch(Unit)
         }
     }
 
