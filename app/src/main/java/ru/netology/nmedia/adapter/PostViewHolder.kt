@@ -1,5 +1,8 @@
 package ru.netology.nmedia.adapter
 
+import android.content.Intent
+import android.net.Uri
+import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.CountCalculator
@@ -53,6 +56,23 @@ class PostViewHolder(
                     }
                 }.show()
             }
+
+            post.video?.let { videoUrl ->
+                videoCard.visibility = View.VISIBLE
+                videoCard.setOnClickListener {
+                    openVideo(videoUrl)
+                }
+                playButton.setOnClickListener {
+                    openVideo(videoUrl)
+                }
+            } ?: run {
+                videoCard.visibility = View.GONE
+            }
         }
+    }
+
+    private fun openVideo(videoUrl: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
+        itemView.context.startActivity(intent)
     }
 }
