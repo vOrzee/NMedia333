@@ -60,19 +60,14 @@ class PostViewHolder(
             post.video?.let { videoUrl ->
                 videoCard.visibility = View.VISIBLE
                 videoCard.setOnClickListener {
-                    openVideo(videoUrl)
+                    onInteractionListener.onVideoClick(videoUrl)
                 }
                 playButton.setOnClickListener {
-                    openVideo(videoUrl)
+                    onInteractionListener.onVideoClick(videoUrl)
                 }
             } ?: run {
                 videoCard.visibility = View.GONE
             }
         }
-    }
-
-    private fun openVideo(videoUrl: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
-        itemView.context.startActivity(intent)
     }
 }

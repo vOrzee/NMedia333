@@ -1,6 +1,7 @@
 package ru.netology.nmedia
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -56,6 +57,10 @@ class MainActivity : AppCompatActivity() {
                 editPostLauncher.launch(post.content)
             }
 
+            override fun onVideoClick(videUrl: String) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videUrl))
+                startActivity(intent)
+            }
         }
         )
 
