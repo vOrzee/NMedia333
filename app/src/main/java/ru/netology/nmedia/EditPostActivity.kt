@@ -45,8 +45,7 @@ class EditPostActivity : AppCompatActivity() {
         }
 
         binding.cancelButton.setOnClickListener {
-            val intent = Intent()
-            setResult(Activity.RESULT_CANCELED, intent)
+            setResult(RESULT_CANCELED)
             finish()
         }
     }

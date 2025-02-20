@@ -14,15 +14,19 @@ import ru.netology.nmedia.adapter.PostAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
+import ru.netology.nmedia.viewmodel.empty
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: PostViewModel by viewModels()
 
     val editPostLauncher = registerForActivityResult(EditPostContract) { result ->
-        result ?: return@registerForActivityResult
-        viewModel.changeContent(result)
-        viewModel.saveContent()
+        if (result == null) {
+            viewModel.editContent(empty)
+        } else {
+            viewModel.changeContent(result)
+            viewModel.saveContent()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
