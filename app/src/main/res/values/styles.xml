@@ -7,6 +7,7 @@
         <item name="android:paddingEnd">@dimen/icon_button_padding</item>
         <item name="android:minWidth">@dimen/icon_button_min_size</item>
         <item name="android:minHeight">@dimen/icon_button_min_size</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="App.Widget.LikeCheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
@@ -17,6 +18,7 @@
         <item name="iconTint">@color/color_like_selector</item>
         <item name="android:minWidth">@dimen/icon_button_min_size</item>
         <item name="android:minHeight">@dimen/icon_button_min_size</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>
