@@ -30,8 +30,9 @@ class EditPostFragment : Fragment() {
     ): View {
         val binding = FragmentEditPostBinding.inflate(inflater, container, false)
 
-        arguments?.edit?.let(binding.editText::setText)
-        binding.editText.setText(arguments?.getString("editedText"))
+        viewModel.edited.observe(viewLifecycleOwner) { post ->
+            binding.editText.setText(post.content)
+        }
 
         binding.ok.setOnClickListener {
             if (binding.editText.text.isNullOrBlank()) {

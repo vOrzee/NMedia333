@@ -46,10 +46,7 @@ class FeedFragment : Fragment() {
 
             override fun onEdit(post: Post) {
                 viewModel.editContent(post)
-                val text = post.content
-                val bundle = Bundle()
-                bundle.putString("editedText", text)
-                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment)//, bundle)
+                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment)
             }
 
             override fun onRemove(post: Post) {
